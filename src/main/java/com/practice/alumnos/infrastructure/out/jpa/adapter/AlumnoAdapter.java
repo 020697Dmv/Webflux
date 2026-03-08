@@ -9,6 +9,7 @@ import com.practice.alumnos.infrastructure.out.jpa.repository.IAlumnoRepository;
 import com.practice.alumnos.infrastructure.out.jpa.util.EstadoAlumno;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 public class AlumnoAdapter implements IAlumnoPersistencePort {
@@ -17,13 +18,18 @@ public class AlumnoAdapter implements IAlumnoPersistencePort {
     private final IAlumnoDocumentMapper alumnoDocumentMapper;
 
     @Override
-    public MessageResponse saveAlumno(Alumno alumno) {
+    public Mono<MessageResponse> saveAlumno(Alumno alumno) {
         AlumnoDocumento documento = alumnoDocumentMapper.toDocument(alumno);
-        AlumnoDocumento guardado = alumnoRepository.save(documento).block();
-        if (guardado != null) {
-            return new MessageResponse("");
-        }
-        return new MessageResponse("Error al guardar el alumno");
+
+        return alumnoRepository.findById(alumno.getId())
+                .flatMap(existente ->
+                    Mono.just(new MessageResponse("El alumno ya existe", false))
+                )
+                .switchIfEmpty(
+                    alumnoRepository.save(documento)
+                            .map(guardado -> new MessageResponse("", true))
+                            .onErrorReturn(new MessageResponse("Error al guardar el alumno", false))
+                );
     }
 
     @Override
@@ -33,3 +39,5 @@ public class AlumnoAdapter implements IAlumnoPersistencePort {
         return alumnoDocumentMapper.toDomainFlux(alumnoDocumentos);
     }
 }
+
+

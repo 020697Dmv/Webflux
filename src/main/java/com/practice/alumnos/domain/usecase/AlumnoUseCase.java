@@ -7,17 +7,16 @@ import com.practice.alumnos.domain.spi.IAlumnoPersistencePort;
 import com.practice.alumnos.infrastructure.out.jpa.util.EstadoAlumno;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 public class AlumnoUseCase implements IAlumnoServicePort {
 
     private final IAlumnoPersistencePort alumnoPersistencePort;
 
-
     @Override
-    public MessageResponse saveAlumno(Alumno alumno) {
-        alumnoPersistencePort.saveAlumno(alumno);
-        return new MessageResponse("");
+    public Mono<MessageResponse> saveAlumno(Alumno alumno) {
+        return alumnoPersistencePort.saveAlumno(alumno);
     }
 
     @Override
@@ -25,3 +24,4 @@ public class AlumnoUseCase implements IAlumnoServicePort {
         return alumnoPersistencePort.getAllAlumnosFindEstado(estado);
     }
 }
+

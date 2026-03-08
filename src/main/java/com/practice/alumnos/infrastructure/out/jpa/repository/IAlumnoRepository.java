@@ -9,3 +9,4 @@ public interface IAlumnoRepository extends ReactiveMongoRepository<AlumnoDocumen
 
     Flux<AlumnoDocumento> findByEstado(EstadoAlumno estado);
 }
+

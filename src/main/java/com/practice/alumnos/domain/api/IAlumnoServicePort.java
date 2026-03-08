@@ -4,13 +4,13 @@ import com.practice.alumnos.domain.model.Alumno;
 import com.practice.alumnos.domain.model.MessageResponse;
 import com.practice.alumnos.infrastructure.out.jpa.util.EstadoAlumno;
 import reactor.core.publisher.Flux;
-
-import java.util.List;
+import reactor.core.publisher.Mono;
 
 public interface IAlumnoServicePort {
 
-    MessageResponse saveAlumno(Alumno alumno);
+    Mono<MessageResponse> saveAlumno(Alumno alumno);
 
     Flux<Alumno> getAllAlumnosFindEstado(EstadoAlumno estado);
 
 }
+

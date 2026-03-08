@@ -2,12 +2,12 @@ package com.practice.alumnos.application.handler;
 
 import com.practice.alumnos.application.dto.request.AlumnoRequestDto;
 import com.practice.alumnos.application.dto.response.AlumnoResponseDto;
+import com.practice.alumnos.application.dto.response.StringResponseDto;
 import com.practice.alumnos.application.handler.impl.IAlumnoHandler;
 import com.practice.alumnos.application.mapper.IAlumnoResponseMapper;
 import com.practice.alumnos.application.mapper.IMessageReponseMapper;
 import com.practice.alumnos.domain.api.IAlumnoServicePort;
 import com.practice.alumnos.domain.model.Alumno;
-import com.practice.alumnos.domain.model.MessageResponse;
 import com.practice.alumnos.infrastructure.out.jpa.util.EstadoAlumno;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,13 +23,15 @@ public class AlumnoHandler implements IAlumnoHandler {
     public final IMessageReponseMapper messageReponseMapper;
 
     @Override
-    public Mono<ResponseEntity<String>> saveAlumno(AlumnoRequestDto alumnoRequestDto) {
+    public Mono<ResponseEntity<StringResponseDto>> saveAlumno(AlumnoRequestDto alumnoRequestDto) {
         Alumno alumnoSave = iAlumnoResponseMapper.alumnoResponseDtoToAlumno(alumnoRequestDto);
-        MessageResponse resultado = alumnoServicePort.saveAlumno(alumnoSave);
-        if (resultado != null && resultado.getMessage() != null && resultado.getMessage().startsWith("Error")) {
-            return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resultado.getMessage()));
-        }
-        return Mono.just(ResponseEntity.status(HttpStatus.CREATED).body(""));
+
+        return alumnoServicePort.saveAlumno(alumnoSave)
+                .flatMap(resultado -> {
+                    StringResponseDto response = messageReponseMapper.toResponse(resultado);
+                    HttpStatus status = resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
+                    return Mono.just(ResponseEntity.status(status).<StringResponseDto>body(response));
+                });
     }
 
     @Override
@@ -38,3 +40,4 @@ public class AlumnoHandler implements IAlumnoHandler {
         return iAlumnoResponseMapper.toResponseList(alumnos);
     }
 }
+

@@ -1,6 +1,7 @@
 package com.practice.alumnos.application.dto.request;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Getter
