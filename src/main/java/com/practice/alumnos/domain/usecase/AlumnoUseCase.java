@@ -4,6 +4,7 @@ import com.practice.alumnos.domain.api.IAlumnoServicePort;
 import com.practice.alumnos.domain.model.Alumno;
 import com.practice.alumnos.domain.model.MessageResponse;
 import com.practice.alumnos.domain.spi.IAlumnoPersistencePort;
+import com.practice.alumnos.domain.validacion.AlumnoValidation;
 import com.practice.alumnos.infrastructure.out.jpa.util.EstadoAlumno;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -16,6 +17,7 @@ public class AlumnoUseCase implements IAlumnoServicePort {
 
     @Override
     public Mono<MessageResponse> saveAlumno(Alumno alumno) {
+        AlumnoValidation.validateAlumno(alumno);
         return alumnoPersistencePort.saveAlumno(alumno);
     }
 
