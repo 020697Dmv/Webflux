@@ -1,5 +1,6 @@
 package com.practice.alumnos.application.handler;
 
+import com.practice.alumnos.application.dto.request.AlumnoRecord;
 import com.practice.alumnos.application.dto.request.AlumnoRequestDto;
 import com.practice.alumnos.application.dto.response.AlumnoResponseDto;
 import com.practice.alumnos.application.dto.response.StringResponseDto;
@@ -23,8 +24,8 @@ public class AlumnoHandler implements IAlumnoHandler {
     public final IMessageReponseMapper messageReponseMapper;
 
     @Override
-    public Mono<ResponseEntity<StringResponseDto>> saveAlumno(AlumnoRequestDto alumnoRequestDto) {
-        Alumno alumnoSave = iAlumnoResponseMapper.alumnoResponseDtoToAlumno(alumnoRequestDto);
+    public Mono<ResponseEntity<StringResponseDto>> saveAlumno(AlumnoRecord alumnoRecord) {
+        Alumno alumnoSave = iAlumnoResponseMapper.alumnoResponseDtoToAlumno(alumnoRecord);
 
         return alumnoServicePort.saveAlumno(alumnoSave)
                 .flatMap(resultado -> {

@@ -1,5 +1,6 @@
 package com.practice.alumnos.infrastructure.input.rest;
 
+import com.practice.alumnos.application.dto.request.AlumnoRecord;
 import com.practice.alumnos.application.dto.request.AlumnoRequestDto;
 import com.practice.alumnos.application.dto.response.AlumnoResponseDto;
 import com.practice.alumnos.application.dto.response.StringResponseDto;
@@ -24,7 +25,7 @@ public class AlumnoController {
     }
 
     @PostMapping("/alumnos")
-    public Mono<ResponseEntity<StringResponseDto>> crear(@RequestBody AlumnoRequestDto alumno) {
+    public Mono<ResponseEntity<StringResponseDto>> crear(@RequestBody AlumnoRecord alumno) {
         return alumnoHandler.saveAlumno(alumno);
     }
 }

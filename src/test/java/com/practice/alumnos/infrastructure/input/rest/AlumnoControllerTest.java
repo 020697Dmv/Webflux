@@ -1,5 +1,6 @@
 package com.practice.alumnos.infrastructure.input.rest;
 
+import com.practice.alumnos.application.dto.request.AlumnoRecord;
 import com.practice.alumnos.application.dto.request.AlumnoRequestDto;
 import com.practice.alumnos.application.dto.response.AlumnoResponseDto;
 import com.practice.alumnos.application.dto.response.StringResponseDto;
@@ -50,9 +51,6 @@ class AlumnoControllerTest {
         alumnoInactivo.setEdad(22);
     }
 
-    // ═══════════════════════════════════════════════════════════
-    //  GET  /v1/api/alumnos/estado
-    // ═══════════════════════════════════════════════════════════
 
     @Test
     @DisplayName("GET /alumnos/estado - retorna lista de alumnos ACTIVOS")
@@ -112,14 +110,12 @@ class AlumnoControllerTest {
         verify(alumnoHandler).getAllAlumnosFindEstado(EstadoAlumno.ACTIVO);
     }
 
-    // ═══════════════════════════════════════════════════════════
-    //  POST  /v1/api/alumnos
-    // ═══════════════════════════════════════════════════════════
+
 
     @Test
     @DisplayName("POST /alumnos - guarda un alumno y retorna 201 CREATED")
     void testCrearAlumno_Exitoso() {
-        when(alumnoHandler.saveAlumno(any(AlumnoRequestDto.class)))
+        when(alumnoHandler.saveAlumno(any(AlumnoRecord.class)))
                 .thenReturn(Mono.just(
                         ResponseEntity.status(HttpStatus.CREATED)
                                 .body(new StringResponseDto("Alumno guardado exitosamente"))
@@ -142,13 +138,13 @@ class AlumnoControllerTest {
                 .expectBody()
                 .jsonPath("$.message").isEqualTo("Alumno guardado exitosamente");
 
-        verify(alumnoHandler).saveAlumno(any(AlumnoRequestDto.class));
+        verify(alumnoHandler).saveAlumno(any(AlumnoRecord.class));
     }
 
     @Test
     @DisplayName("POST /alumnos - retorna 400 cuando el alumno ya existe")
     void testCrearAlumno_YaExiste() {
-        when(alumnoHandler.saveAlumno(any(AlumnoRequestDto.class)))
+        when(alumnoHandler.saveAlumno(any(AlumnoRecord.class)))
                 .thenReturn(Mono.just(
                         ResponseEntity.status(HttpStatus.BAD_REQUEST)
                                 .body(new StringResponseDto("El alumno ya existe"))
@@ -171,6 +167,6 @@ class AlumnoControllerTest {
                 .expectBody()
                 .jsonPath("$.message").isEqualTo("El alumno ya existe");
 
-        verify(alumnoHandler).saveAlumno(any(AlumnoRequestDto.class));
+        verify(alumnoHandler).saveAlumno(any(AlumnoRecord.class));
     }
 }

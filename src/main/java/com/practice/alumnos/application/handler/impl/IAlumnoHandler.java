@@ -1,5 +1,6 @@
 package com.practice.alumnos.application.handler.impl;
 
+import com.practice.alumnos.application.dto.request.AlumnoRecord;
 import com.practice.alumnos.application.dto.request.AlumnoRequestDto;
 import com.practice.alumnos.application.dto.response.AlumnoResponseDto;
 import com.practice.alumnos.application.dto.response.StringResponseDto;
@@ -11,7 +12,7 @@ import reactor.core.publisher.Mono;
 
 public interface IAlumnoHandler {
 
-    Mono<ResponseEntity<StringResponseDto>> saveAlumno(AlumnoRequestDto alumnoRequestDto);
+    Mono<ResponseEntity<StringResponseDto>> saveAlumno(AlumnoRecord alumnoRecord);
 
     Flux<AlumnoResponseDto> getAllAlumnosFindEstado(EstadoAlumno estado);
 
