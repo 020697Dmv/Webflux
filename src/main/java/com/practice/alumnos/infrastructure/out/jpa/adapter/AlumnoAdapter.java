@@ -3,6 +3,8 @@ package com.practice.alumnos.infrastructure.out.jpa.adapter;
 import com.practice.alumnos.domain.model.Alumno;
 import com.practice.alumnos.domain.model.MessageResponse;
 import com.practice.alumnos.domain.spi.IAlumnoPersistencePort;
+import com.practice.alumnos.infrastructure.exception.AlumnoAlreadyExistsException;
+import com.practice.alumnos.infrastructure.exception.AlumnoSaveException;
 import com.practice.alumnos.infrastructure.out.jpa.documents.AlumnoDocumento;
 import com.practice.alumnos.infrastructure.out.jpa.mapper.IAlumnoDocumentMapper;
 import com.practice.alumnos.infrastructure.out.jpa.repository.IAlumnoRepository;
@@ -22,13 +24,11 @@ public class AlumnoAdapter implements IAlumnoPersistencePort {
         AlumnoDocumento documento = alumnoDocumentMapper.toDocument(alumno);
 
         return alumnoRepository.findById(alumno.getId())
-                .flatMap(existente ->
-                    Mono.just(new MessageResponse("El alumno ya existe", false))
-                )
+                .flatMap(existente -> Mono.<MessageResponse>error(new AlumnoAlreadyExistsException()))
                 .switchIfEmpty(
                     alumnoRepository.save(documento)
                             .map(guardado -> new MessageResponse("", true))
-                            .onErrorReturn(new MessageResponse("Error al guardar el alumno", false))
+                            .onErrorMap(AlumnoSaveException::new)
                 );
     }
 
