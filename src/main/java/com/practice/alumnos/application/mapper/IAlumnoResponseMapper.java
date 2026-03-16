@@ -1,6 +1,7 @@
 package com.practice.alumnos.application.mapper;
 
 import com.practice.alumnos.application.dto.request.AlumnoRecord;
+import com.practice.alumnos.application.dto.request.AlumnoUpdateRecord;
 import com.practice.alumnos.application.dto.response.AlumnoResponseDto;
 import com.practice.alumnos.domain.model.Alumno;
 import org.mapstruct.Mapper;
@@ -15,6 +16,8 @@ public interface IAlumnoResponseMapper {
     AlumnoResponseDto toResponse(Alumno alumno);
 
     Alumno alumnoResponseDtoToAlumno(AlumnoRecord alumnoRecord);
+
+    Alumno alumnoUpdateRecordToAlumno(AlumnoUpdateRecord alumnoUpdateRecord);
 
     default Flux<AlumnoResponseDto> toResponseList(Flux<Alumno> alumnos) {
         return alumnos.map(this::toResponse);

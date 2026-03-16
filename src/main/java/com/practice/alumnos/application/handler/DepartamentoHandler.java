@@ -20,14 +20,10 @@ public class DepartamentoHandler implements IDepartamentoHandler {
     public final IMessageReponseMapper messageReponseMapper;
 
     @Override
-    public Mono<ResponseEntity<StringResponseDto>> saveDepartamento(DepartamentoRecord departamentoRecord) {
+    public Mono<StringResponseDto> saveDepartamento(DepartamentoRecord departamentoRecord) {
         Departamento departamentoSave = departamentoMapper.departamentoRecordTODepartamento(departamentoRecord);
 
         return departamentoServicePort.saveDepartamento(departamentoSave)
-                .flatMap(resultado -> {
-                    StringResponseDto response = messageReponseMapper.toResponse(resultado);
-                    HttpStatus status = resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
-                    return Mono.just(ResponseEntity.status(status).body(response));
-                });
+                .map(messageReponseMapper::toResponse);
     }
 }

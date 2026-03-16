@@ -20,7 +20,7 @@ public class DepartamentoController {
     private final IDepartamentoHandler departamentoHandler;
 
     @PostMapping("/departamentos")
-    public Mono<ResponseEntity<StringResponseDto>> crear(@RequestBody DepartamentoRecord departamentoRecord) {
+    public Mono<StringResponseDto> crear(@RequestBody DepartamentoRecord departamentoRecord) {
         return departamentoHandler.saveDepartamento(departamentoRecord);
     }
 }

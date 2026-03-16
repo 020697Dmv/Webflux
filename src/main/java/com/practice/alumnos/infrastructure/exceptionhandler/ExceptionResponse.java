@@ -3,8 +3,8 @@ package com.practice.alumnos.infrastructure.exceptionhandler;
 public enum ExceptionResponse{
 
     ALUMNO_ALREADY_EXISTS("El alumno ya existe"),
-    ALUMNO_SAVE_ERROR("Error al guardar el alumno");
-
+    ALUMNO_SAVE_ERROR("Error al guardar el alumno"),
+    ALUMNO_NOT_FOUND("Alumno no encontrado con id: %s");
     private final String message;
 
 

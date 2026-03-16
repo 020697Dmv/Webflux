@@ -1,6 +1,7 @@
 package com.practice.alumnos.infrastructure.input.rest;
 
 import com.practice.alumnos.application.dto.request.AlumnoRecord;
+import com.practice.alumnos.application.dto.request.AlumnoUpdateRecord;
 import com.practice.alumnos.application.dto.response.AlumnoResponseDto;
 import com.practice.alumnos.application.dto.response.StringResponseDto;
 import com.practice.alumnos.application.handler.impl.IAlumnoHandler;
@@ -24,8 +25,18 @@ public class AlumnoController {
     }
 
     @PostMapping("/alumnos")
-    public Mono<ResponseEntity<StringResponseDto>> crear(@RequestBody AlumnoRecord alumno) {
+    public Mono<StringResponseDto> crear(@RequestBody AlumnoRecord alumno) {
         return alumnoHandler.saveAlumno(alumno);
+    }
+
+    @PutMapping("alumnos/{id}")
+    public Mono<AlumnoResponseDto> alumnosUpdate(@RequestBody AlumnoUpdateRecord alumnoUpdateRecord, @PathVariable String id) {
+        return alumnoHandler.uptadeAlumno(id, alumnoUpdateRecord);
+    }
+
+    @DeleteMapping("alumnos/{id}")
+    public Mono<StringResponseDto> deleteAlumno(@PathVariable String id) {
+        return alumnoHandler.deleteAlumno(id);
     }
 }
 

@@ -1,6 +1,7 @@
 package com.practice.alumnos.application.handler;
 
 import com.practice.alumnos.application.dto.request.AlumnoRecord;
+import com.practice.alumnos.application.dto.request.AlumnoUpdateRecord;
 import com.practice.alumnos.application.dto.response.AlumnoResponseDto;
 import com.practice.alumnos.application.dto.response.StringResponseDto;
 import com.practice.alumnos.application.handler.impl.IAlumnoHandler;
@@ -23,21 +24,30 @@ public class AlumnoHandler implements IAlumnoHandler {
     public final IMessageReponseMapper messageReponseMapper;
 
     @Override
-    public Mono<ResponseEntity<StringResponseDto>> saveAlumno(AlumnoRecord alumnoRecord) {
+    public Mono<StringResponseDto> saveAlumno(AlumnoRecord alumnoRecord) {
         Alumno alumnoSave = iAlumnoResponseMapper.alumnoResponseDtoToAlumno(alumnoRecord);
 
         return alumnoServicePort.saveAlumno(alumnoSave)
-                .flatMap(resultado -> {
-                    StringResponseDto response = messageReponseMapper.toResponse(resultado);
-                    HttpStatus status = resultado.isSuccess() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST;
-                    return Mono.just(ResponseEntity.status(status).<StringResponseDto>body(response));
-                });
+                .map(messageReponseMapper::toResponse);
     }
 
     @Override
     public Flux<AlumnoResponseDto> getAllAlumnosFindEstado(EstadoAlumno estado) {
         Flux<Alumno> alumnos = alumnoServicePort.getAllAlumnosFindEstado(estado);
         return iAlumnoResponseMapper.toResponseList(alumnos);
+    }
+
+    @Override
+    public Mono<AlumnoResponseDto> uptadeAlumno(String id, AlumnoUpdateRecord alumnoUpdateRecord) {
+        Alumno alumnoUpdate = iAlumnoResponseMapper.alumnoUpdateRecordToAlumno(alumnoUpdateRecord);
+
+        return alumnoServicePort.uptadeAlumno(id, alumnoUpdate)
+                .map(iAlumnoResponseMapper::toResponse);
+    }
+
+    @Override
+    public Mono<StringResponseDto> deleteAlumno(String id) {
+        return alumnoServicePort.deleteAlumno(id).map(messageReponseMapper::toResponse);
     }
 }
 

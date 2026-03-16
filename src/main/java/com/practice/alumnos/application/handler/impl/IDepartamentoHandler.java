@@ -7,6 +7,6 @@ import reactor.core.publisher.Mono;
 
 public interface IDepartamentoHandler {
 
-    Mono<ResponseEntity<StringResponseDto>> saveDepartamento(DepartamentoRecord departamentoRecord);
+    Mono<StringResponseDto> saveDepartamento(DepartamentoRecord departamentoRecord);
 
 }
