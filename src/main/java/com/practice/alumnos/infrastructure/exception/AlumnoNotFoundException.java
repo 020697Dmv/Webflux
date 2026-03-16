@@ -1,0 +1,4 @@
+package com.practice.alumnos.infrastructure.exception;
+
+public class AlumnoNotFoundException {
+}
