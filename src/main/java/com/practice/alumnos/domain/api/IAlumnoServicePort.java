@@ -12,5 +12,9 @@ public interface IAlumnoServicePort {
 
     Flux<Alumno> getAllAlumnosFindEstado(EstadoAlumno estado);
 
+    Mono<Alumno> uptadeAlumno(String id, Alumno alumno);
+
+    Mono<MessageResponse> deleteAlumno(String id);
+
 }
 

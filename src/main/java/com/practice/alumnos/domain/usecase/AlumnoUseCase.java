@@ -25,5 +25,15 @@ public class AlumnoUseCase implements IAlumnoServicePort {
     public Flux<Alumno> getAllAlumnosFindEstado(EstadoAlumno estado) {
         return alumnoPersistencePort.getAllAlumnosFindEstado(estado);
     }
+
+    @Override
+    public Mono<Alumno> uptadeAlumno(String id, Alumno alumno) {
+        return alumnoPersistencePort.uptadeAlumno(id, alumno);
+    }
+
+    @Override
+    public Mono<MessageResponse> deleteAlumno(String id) {
+        return alumnoPersistencePort.deleteAlumno(id);
+    }
 }
 

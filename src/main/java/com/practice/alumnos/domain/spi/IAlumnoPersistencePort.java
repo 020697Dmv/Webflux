@@ -11,5 +11,10 @@ public interface IAlumnoPersistencePort {
     Mono<MessageResponse> saveAlumno(Alumno alumno);
 
     Flux<Alumno> getAllAlumnosFindEstado(EstadoAlumno estado);
+
+    Mono<Alumno> uptadeAlumno(String id, Alumno alumno);
+
+    Mono<MessageResponse> deleteAlumno(String id);
+
 }
 
